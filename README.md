@@ -5,6 +5,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### `.env file`
 
 the required api url and port are supplied in .env file which you would find in the root directory
+### `prerequistes`
+
+node installed on your local system with node 14 or higher
+
+### `install dependencies`
+
+navigate to the app directory and run npm install on your terminal
 
 ### `npm start`
 
