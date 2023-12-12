@@ -9,6 +9,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import axios from "axios";
 import React, { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import SnackBarNotification from "../components/snackbar/Snackbar";
 import { SetloginUser } from "../helpers/storage";
 import "./Login.scss";
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
+  const navigate = useNavigate();
   const classes = useStyles();
   const [snackBar, openSnackBar] = React.useState(false);
   const [notificationMsg, setNotifificationMsg] = React.useState({
@@ -77,6 +79,7 @@ export default function Login(props) {
           severity: "success",
         };
         setNotifificationMsg(msg);
+        navigate("/welcome");
       } else {
         openSnackBar(true);
         let msg = {

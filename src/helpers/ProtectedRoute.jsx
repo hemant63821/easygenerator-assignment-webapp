@@ -1,4 +1,5 @@
-import { Navigate, Routes } from "react-router-dom";
+import { Fragment } from "react";
+import { Navigate } from "react-router-dom";
 import { isLogin } from "./storage";
 
 export const ProtectedRoute = ({ children }) => {
@@ -7,7 +8,7 @@ export const ProtectedRoute = ({ children }) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
-  return <Routes>{children}</Routes>;
+  return <Fragment>{children}</Fragment>;
 };
 
 export default ProtectedRoute;
