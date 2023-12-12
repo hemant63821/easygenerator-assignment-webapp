@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### `.env file`
+
+the required api url and port are supplied in .env file which you would find in the root directory
+
 ### `npm start`
 
 Runs the app in the development mode.\
