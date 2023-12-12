@@ -7,6 +7,7 @@ import {
 import TextField from "@material-ui/core/TextField";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import axios from "axios";
 import React, { Fragment } from "react";
 import SnackBarNotification from "../components/snackbar/Snackbar";
 import "./Login.scss";
@@ -47,7 +48,51 @@ export default function Login(props) {
     errorType: "",
   });
 
-  const authenticate = () => {};
+  const signIn = async (email, password) => {
+    if (!email) {
+      validateAndSetInputFields(email, "email");
+      return null;
+    }
+    if (!password) {
+      validateAndSetInputFields(password, "pwd");
+      return null;
+    }
+    try {
+      let payload = {
+        email: email,
+        password: password,
+      };
+      const result = await axios.post(
+        process.env.REACT_APP_BASE_URL + "/auth/sign-in",
+        payload
+      );
+      console.log("hecl result", result);
+      if (result.data.isSuccessful === true) {
+        openSnackBar(true);
+        let msg = {
+          msg: `Login Successfull welcome ${
+            result?.data?.data?.userName || ""
+          }`,
+          severity: "success",
+        };
+        setNotifificationMsg(msg);
+      } else {
+        openSnackBar(true);
+        let msg = {
+          msg: result.data.message,
+          severity: "error",
+        };
+        resetStates();
+      }
+    } catch (err) {
+      openSnackBar(true);
+      let msg = {
+        msg: "Oops Something Went Wrong!",
+        severity: "error",
+      };
+      setNotifificationMsg(msg);
+    }
+  };
 
   const passwordValidator = (pwd) => {
     const validation = {
@@ -143,7 +188,7 @@ export default function Login(props) {
   return (
     <div className="login_container container-fluid">
       <SnackBarNotification
-        openNotification={"test"}
+        openNotification={snackBar}
         closeSnackbar={() => {
           openSnackBar(false);
         }}
@@ -292,7 +337,11 @@ export default function Login(props) {
                 className="login-button"
                 style={{ width: "100%" }}
                 color="secondary"
-                onClick={authenticate}
+                onClick={() =>
+                  !emailError.error && !pwdError.error
+                    ? signIn(email, password)
+                    : null
+                }
               >
                 Create
               </Button>
@@ -320,7 +369,7 @@ export default function Login(props) {
                 className="login-button"
                 style={{ width: "100%" }}
                 color="secondary"
-                onClick={authenticate}
+                onClick={() => signIn(email, password)}
               >
                 Login
               </Button>

@@ -9,7 +9,7 @@ export default function SnackBarNotification(props) {
         open={props.openNotification}
         onClose={props.closeSnackbar}
         key={"top" + "right"}
-        autoHideDuration={10000}
+        autoHideDuration={2000}
       >
         <MuiAlert
           elevation={6}
