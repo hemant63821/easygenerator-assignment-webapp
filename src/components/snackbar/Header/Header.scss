@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 18px;
     background-color: #333;
     color: #fff;
     position: sticky;
@@ -10,12 +10,14 @@
     z-index: 1000;
   }
   
-  .scrollable-contents {
-    overflow-x: auto;
-    max-width: 70%;
-  }
-  
-  .scrollable-contents p {
-    display: inline-block;
-    margin: 0 10px;
+
+  .logout-button {
+    padding: 5px 10px !important;
+    background-color: #e24f55 !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    margin-left: auto !important; /* Push the button to the extreme right */
   }
