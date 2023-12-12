@@ -66,7 +66,6 @@ export default function Login(props) {
         process.env.REACT_APP_BASE_URL + "/auth/sign-in",
         payload
       );
-      console.log("hecl result", result);
       if (result.data.isSuccessful === true) {
         openSnackBar(true);
         let msg = {
@@ -85,50 +84,60 @@ export default function Login(props) {
         resetStates();
       }
     } catch (err) {
-      openSnackBar(true);
       let msg = {
         msg: "Oops Something Went Wrong!",
         severity: "error",
       };
+      if (err?.response.status === 400) {
+        msg.msg = err.response.data.message;
+      }
+      openSnackBar(true);
       setNotifificationMsg(msg);
     }
   };
 
-  const passwordValidator = (pwd) => {
+  const passwordValidator = (pwd, type) => {
     const validation = {
       error: false,
       errorType: "",
     };
 
-    if (!pwd) {
-      validation.error = true;
-      validation.errorType = "Password Required!";
-      return validation;
-    }
-    const minLength = pwd?.length < 8 ? false : true;
-    const hasLetter = pwd.match(/[a-zA-Z]/);
-    const hasNumber = pwd.match(/\d/);
-    const hasSpecialChar = pwd.match(/[!@#$%^&*(),.?":{}|<>]/);
+    if (type === "loginpwd") {
+      if (!pwd) {
+        validation.error = true;
+        validation.errorType = "Password Required!";
+      }
+    } else {
+      if (!pwd) {
+        validation.error = true;
+        validation.errorType = "Password Required!";
+        return validation;
+      }
+      const minLength = pwd?.length < 8 ? false : true;
+      const hasLetter = pwd.match(/[a-zA-Z]/);
+      const hasNumber = pwd.match(/\d/);
+      const hasSpecialChar = pwd.match(/[!@#$%^&*(),.?":{}|<>]/);
 
-    if (!minLength) {
-      validation.error = true;
-      validation.errorType = "minimum 8 characters required!";
-    }
+      if (!minLength) {
+        validation.error = true;
+        validation.errorType = "minimum 8 characters required!";
+      }
 
-    if (!hasLetter) {
-      validation.error = true;
-      validation.errorType = "Atleast one character required [a-zA-Z]!";
-    }
+      if (!hasLetter) {
+        validation.error = true;
+        validation.errorType = "Atleast one character required [a-zA-Z]!";
+      }
 
-    if (!hasNumber) {
-      validation.error = true;
-      validation.errorType = "Atleast one number required 0-9!";
-    }
+      if (!hasNumber) {
+        validation.error = true;
+        validation.errorType = "Atleast one number required 0-9!";
+      }
 
-    if (!hasSpecialChar) {
-      validation.error = true;
-      validation.errorType =
-        "atleast one special character required !@#$%^&*(),.?:{}|<></>";
+      if (!hasSpecialChar) {
+        validation.error = true;
+        validation.errorType =
+          "atleast one special character required !@#$%^&*(),.?:{}|<></>";
+      }
     }
 
     return validation;
@@ -160,9 +169,14 @@ export default function Login(props) {
       setName(value);
       value ? setNameError(false) : setNameError(true);
     }
+    if (type === "loginpwd") {
+      setPassword(value);
+      const ispasswordValidated = passwordValidator(value, type);
+      setPwdError(ispasswordValidated);
+    }
     if (type === "pwd") {
       setPassword(value);
-      const ispasswordValidated = passwordValidator(value);
+      const ispasswordValidated = passwordValidator(value, type);
       setPwdError(ispasswordValidated);
     }
     if (type === "email") {
@@ -306,7 +320,7 @@ export default function Login(props) {
                       value={password}
                       style={{ width: 350 }}
                       onChange={(e) =>
-                        validateAndSetInputFields(e.target.value, "pwd")
+                        validateAndSetInputFields(e.target.value, "loginpwd")
                       }
                       InputProps={{
                         endAdornment: (
