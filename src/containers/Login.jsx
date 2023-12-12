@@ -81,8 +81,65 @@ export default function Login(props) {
           msg: result.data.message,
           severity: "error",
         };
-        resetStates();
+        setNotifificationMsg(msg);
       }
+      resetStates();
+    } catch (err) {
+      let msg = {
+        msg: "Oops Something Went Wrong!",
+        severity: "error",
+      };
+      if (err?.response.status === 400) {
+        msg.msg = err.response.data.message;
+      }
+      openSnackBar(true);
+      setNotifificationMsg(msg);
+    }
+  };
+
+  const createAccount = async (email, password, name) => {
+    if (!name) {
+      validateAndSetInputFields(password, "name");
+      return null;
+    }
+    if (!email) {
+      validateAndSetInputFields(email, "email");
+      return null;
+    }
+    if (!password) {
+      validateAndSetInputFields(password, "pwd");
+      return null;
+    }
+
+    try {
+      let payload = {
+        email: email,
+        password: password,
+        name: name,
+      };
+      const result = await axios.post(
+        process.env.REACT_APP_BASE_URL + "/auth/register",
+        payload
+      );
+      if (result.data.isSuccessful === true) {
+        openSnackBar(true);
+        let msg = {
+          msg: `User ${
+            result?.data?.data?.userName || ""
+          } created successfully!`,
+          severity: "success",
+        };
+        setTimeout(openSignUpScreen(false), 5000);
+        setNotifificationMsg(msg);
+      } else {
+        openSnackBar(true);
+        let msg = {
+          msg: result.data.message,
+          severity: "error",
+        };
+        setNotifificationMsg(msg);
+      }
+      resetStates();
     } catch (err) {
       let msg = {
         msg: "Oops Something Went Wrong!",
@@ -351,11 +408,7 @@ export default function Login(props) {
                 className="login-button"
                 style={{ width: "100%" }}
                 color="secondary"
-                onClick={() =>
-                  !emailError.error && !pwdError.error
-                    ? signIn(email, password)
-                    : null
-                }
+                onClick={() => createAccount(email, password, name)}
               >
                 Create
               </Button>
