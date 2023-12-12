@@ -253,7 +253,7 @@ export default function Login(props) {
                     <TextField
                       error={pwdError.error}
                       id="current-password"
-                      label="password"
+                      label="Password"
                       type={showPwd ? null : "password"}
                       helperText={pwdError.error ? pwdError.errorType : ""}
                       variant="outlined"
