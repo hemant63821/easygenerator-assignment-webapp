@@ -10,6 +10,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import axios from "axios";
 import React, { Fragment } from "react";
 import SnackBarNotification from "../components/snackbar/Snackbar";
+import { SetloginUser } from "../helpers/storage";
 import "./Login.scss";
 
 const useStyles = makeStyles((theme) => ({
@@ -68,6 +69,7 @@ export default function Login(props) {
       );
       if (result.data.isSuccessful === true) {
         openSnackBar(true);
+        SetloginUser(result?.data?.data);
         let msg = {
           msg: `Login Successfull welcome ${
             result?.data?.data?.userName || ""
