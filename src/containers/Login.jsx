@@ -415,7 +415,7 @@ export default function Login(props) {
                 Create
               </Button>
 
-              <div class="break-line"></div>
+              <div className="break-line"></div>
 
               <Button
                 variant="contained"
@@ -443,7 +443,7 @@ export default function Login(props) {
                 Login
               </Button>
 
-              <div class="break-line"></div>
+              <div className="break-line"></div>
 
               <Button
                 variant="contained"
