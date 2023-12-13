@@ -57,9 +57,14 @@ export default function Login(props) {
       return null;
     }
     if (!password) {
-      validateAndSetInputFields(password, "pwd");
+      validateAndSetInputFields(password, "loginpwd");
       return null;
     }
+
+    if (email && emailValidator(email).error) {
+      return null;
+    }
+
     try {
       let payload = {
         email: email,
@@ -113,6 +118,14 @@ export default function Login(props) {
     }
     if (!password) {
       validateAndSetInputFields(password, "pwd");
+      return null;
+    }
+
+    if (password && passwordValidator(password).error) {
+      return null;
+    }
+
+    if (email && emailValidator(email).error) {
       return null;
     }
 
